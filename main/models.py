@@ -10,6 +10,9 @@ class User(models.Model):
 
     registration_data=models.DateTimeField(default=timezone.now)
 
+    cookie=models.CharField(max_length=128)
+
+    
 
     def __str__(self):
         return self.name
