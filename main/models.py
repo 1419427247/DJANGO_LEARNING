@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 # Create your models here.
 
-#公安客户：管理建筑工地工人信息
+#客户：管理建筑工地工人信息
 #派出所与工地联系渠道
 #每个工地位置
 

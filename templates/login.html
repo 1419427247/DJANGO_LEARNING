@@ -6,11 +6,12 @@
     <title>登录页面</title>
 </head>
 <body>
+    {{msg}}
     <form action="/login/" method="POST">
-        <input type="text" name = "c_name",id = "">
-        <input type="password" name="c_password" id="">
+        用户名:<input type="text" name = "c_name",id = "">
+        <br>
+        密码:<input type="password" name="c_password" id="">
         <input type="submit" value="提交">
     </form>
-    {{msg}}
 </body>
 </html>
