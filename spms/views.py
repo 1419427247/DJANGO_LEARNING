@@ -5,7 +5,7 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from spms.models import User
+from spms.models import User,ConstructionSite
 
 class BaseMinix(object):
     index = "index.html"
@@ -29,7 +29,17 @@ class BaseMinix(object):
 class Index(BaseMinix,View):
     def get(self,request):
         return super().get(request) or render(request,self.index)
-
+    def post(self,request):
+        if self.is_token_valid(request):
+            if request.POST.get('type') == 'get_sites':
+                r_list = []
+                for site in ConstructionSite.objects.all():
+                    r_list.append(site.name)
+                    r_list.append(' ')
+                r_list.pop();
+                return HttpResponse(r_list)
+            if request.POST.get('type') == 'get_sites':
+                pass
 class Login(BaseMinix,View):
     
     def get(self,request):

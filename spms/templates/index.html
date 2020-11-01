@@ -18,7 +18,9 @@
         </div>
         <div class="main_div">
             <div class="select_site_form">
-                <select name="" id=""></select>
+                <select name="" id="sites_select">
+
+                </select>
             </div>
             <div class="worker_list_form">
 
@@ -27,11 +29,43 @@
     </div>
 </body>
 
+
 <script>
+    
+    var sites_select = document.getElementById("sites_select");
+    sites_select.onchange = function(event){
+        console.log(event);
+    }
+    
+    Ajax({
+        method:"POST",
+        url:"/",
+            async:true,
+            data:{
+                "type":"get_sites"
+            },
+            timeout:1000,
+            callback:function(success,result){
+                if (success) {
+                    var results = result.split(' ');
+                    for (const value of results) {
+                        sites_select.options.add(new Option(value, 1))
+                    }
+                }else{
+                    alert("获取工地信息失败,错误代码:"+result);
+                }
+            },
+        });
+    
+
+
     function logout() {
         Cookie.delete('token');
         location.reload();
     }
+
+    
+
 </script>
 
 </html>
