@@ -71,7 +71,7 @@
                         alert(list[1]);
                     } else if (list[0] == '1') {
                         setCookie("token", list[1])
-                        alert("登录成功");
+                        location.reload();
                     }
                     login_button.removeAttribute("disabled");
                 }else{

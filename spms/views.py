@@ -13,7 +13,6 @@ class BaseMinix(object):
 
     def is_token_valid(self,request):
         token = request.COOKIES.get('token')
-        print(token)
         if token is None:
             return False
         else:
@@ -44,9 +43,7 @@ class Login(BaseMinix,View):
             return HttpResponse("0 请输入用户名和密码")
         ret = User.objects.filter(name=name,password=password)
         if ret.count() == 1:
-            print(uuid.uuid4());
-            token = base64.encodebytes(uuid.uuid4().bytes())
-            print(token)
+            token = str(uuid.uuid1())
             ret.update(token=token)
             return HttpResponse("1 " + token)
         else:
