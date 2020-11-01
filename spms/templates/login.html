@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>登录页面</title>
+</head>
+
+<body>
+    <div class="bg">
+        <img src="{% static 'img/bg.jpeg' %}" alt="">
+    </div>
+    <div class="login_window">
+        <div class="login_window_title">
+            <p>用户登录</p>
+        </div>
+        <div class="login_form">
+            <div class="login_form_input">
+                <input type="text" id="user_name" placeholder="用户名">
+                <img src="" alt=" ">
+            </div>
+            <div class="login_form_input">
+                <input type="password" id="user_password" placeholder="密码">
+                <img src="" alt=" ">
+            </div>
+            <button class="login_form_submit" id="login_button" onclick="login()">登录</button>
+        </div>
+
+    </div>
+
+</body>
+
+<script>
+    function getCookieValue(key) {
+        var cookies = {};
+        for (const value in document.cookie.split(';')) {
+            let cookie = document.cookie.split('=');
+            if (key == cookie[0]) {
+                return cookie[1];
+            }
+        }
+        console.log(document.cookie);
+    }
+
+    function setCookie(key, value) {
+        document.cookie = key + "=" + value;
+    }
+
+
+    function login() {
+        name = document.getElementById("user_name").value;
+        password = document.getElementById("user_password").value;
+
+
+        var login_button = document.getElementById("login_button");
+        login_button.setAttribute("disabled", "disabled");
+
+        var xmlhttp = new XMLHttpRequest;
+
+        xmlhttp.timeout = 1000;
+
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4) {
+                if (xmlhttp.status == 200) {
+                    var result = xmlhttp.responseText;
+                    var list = result.split(' ');
+                    if (list[0] == '0') {
+                        alert(list[1]);
+                    } else if (list[0] == '1') {
+                        setCookie("token", list[1])
+                        alert("登录成功");
+                    }
+                    login_button.removeAttribute("disabled");
+                }else{
+                    alert("无法登录");
+                }
+                login_button.removeAttribute("disabled");
+            }
+        }
+        xmlhttp.ontimeout = function () {
+            alert("服务器响应超时");
+            login_button.removeAttribute("disabled");
+        }
+
+        xmlhttp.onerror = function () {
+            alert("登陆异常");
+            login_button.removeAttribute("disabled");
+        }
+
+        xmlhttp.onabort = function () {
+            alert("登陆异常");
+            login_button.removeAttribute("disabled");
+        }
+
+        xmlhttp.open("POST", "/login/", true);
+
+        var data = new FormData();
+        data.append("user_name", name);
+        data.append("user_password", password);
+
+        xmlhttp.send(data);
+    }
+</script>
+
+</html>
