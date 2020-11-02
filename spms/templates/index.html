@@ -36,11 +36,26 @@
         <button onclick="logout()">确定</button>
         <button onclick="hide('logout_message','mask')">取消</button>
     </div>
+    <div class = "search_worker_window" id ="search_worker_window">
+        <div class = "title">
+            <p>查询工人</p>
+            <button onclick="hide('search_worker_window','mask')">x</button>
+        </div>
+        <div class = "main">
+            ID:<input type="number" id="search_id">
+            姓名:<input type="text" id="search_name">
+            身份证号:<input type="text" id = "search_id_number">
+            <button onclick="searchWorkers()">查找</button>
+        </div>
+    </div>
+
+
     <div class="mask" id="mask"></div>
 
     <div class="header">
         <button onclick="show('logout_message','mask')">退出登陆</button>
         <button onclick="show('select_site_window','mask')">选择工地</button>
+        <button onclick="show('search_worker_window','mask')">查找员工</button>
     </div>
     <div class="worker_list_form">
         <div class="worker_list" id="worker_list">
@@ -132,10 +147,58 @@
                 }
             },
         });
+    }
 
+    function searchWorkers(){
+        hide('search_worker_window', 'mask');
 
+        var search_id = document.getElementById("search_id").value;
+        var search_name = document.getElementById("search_name").value;
+        var search_id_number = document.getElementById("search_id_number").value;
 
-        console.log(siteName);
+        if (search_id == '' && search_name == '' && search_id_number == '') {
+            alert("至少输入一项");
+            return;
+        }
+
+        Ajax({
+            method: "POST",
+            url: "/",
+            async: true,
+            data: {
+                "type": "search_workers",
+                "search_id": search_id,
+                "search_name": search_name,
+                "search_id_number": search_id_number,
+            },
+            timeout: 1000,
+            callback: function (success, result) {
+                if (success) {
+                    var results = result.split(' ');
+                    var worker_list = document.getElementById("worker_table");
+                    if (results.length <= 1) {
+                        alert("没有找到工人信息")
+                        return;
+                    }
+                    worker_list.innerHTML = "<tr><th>id</th><th>姓名</th><th>性别</th><th>身份证号码</th><th>居住地址</th></tr>";
+                    for (let index = 0; index < results.length; index += 5) {
+                        let r = document.createElement("tr");
+                        let array = new Array();
+                        
+                        array.push("<td>",results[index],"</td>");
+                        array.push("<td>",results[index+1],"</td>");
+                        array.push("<td>",results[index+2],"</td>");
+                        array.push("<td>",results[index+3],"</td>");
+                        array.push("<td>",results[index+4],"</td>");
+
+                        r.innerHTML = array.join('');
+                        worker_list.appendChild(r);
+                    }   
+                } else {
+                    alert("无法获取工人信息,错误代码:" + result);
+                }
+            },
+        });
     }
 
 </script>

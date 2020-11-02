@@ -36,28 +36,51 @@ class Index(BaseMinix,View):
                 for site in ConstructionSite.objects.all():
                     r_list.append(site.name + ' ' + site.address)
                     r_list.append(' ')
-                r_list.pop();
+                r_list.pop()
                 return HttpResponse(r_list)
-            if request.POST.get('type') == 'get_workers':
-                site_name = request.POST.get('site_name');
+            elif request.POST.get('type') == 'get_workers':
+                site_name = request.POST.get('site_name')
 
-                workers = Worker.objects.filter(site_id = ConstructionSite.objects.get(name=site_name).id);
+                workers = Worker.objects.filter(site_id = ConstructionSite.objects.get(name=site_name).id)
                 worker_list = ['']
                 for worker in workers:
                     worker_list.append(worker.id)
                     worker_list.append(' ')
-                    worker_list.append(worker.sex)
-                    worker_list.append(' ')
                     worker_list.append(worker.name)
+                    worker_list.append(' ')
+                    worker_list.append(worker.sex)
                     worker_list.append(' ')
                     worker_list.append(worker.id_number)
                     worker_list.append(' ')
                     worker_list.append(worker.residential_address)
                     worker_list.append(' ')
 
-                worker_list.pop();
-                return HttpResponse(worker_list);
+                worker_list.pop()
+                return HttpResponse(worker_list)
 
+            elif request.POST.get('type') == 'search_workers':
+                search_id = request.POST.get('search_id')
+                search_name = request.POST.get('search_name')
+                search_id_number = request.POST.get('search_id_number')
+                if search_id != '':
+                    workers = Worker.objects.filter(id = search_id)
+                else:
+                    workers = Worker.objects.filter(name__contains=search_name,id_number__contains=search_id_number)
+                
+                worker_list = ['']
+                for worker in workers:
+                    worker_list.append(worker.id)
+                    worker_list.append(' ')
+                    worker_list.append(worker.name)
+                    worker_list.append(' ')
+                    worker_list.append(worker.sex)
+                    worker_list.append(' ')
+                    worker_list.append(worker.id_number)
+                    worker_list.append(' ')
+                    worker_list.append(worker.residential_address)
+                    worker_list.append(' ')
+                worker_list.pop()
+                return HttpResponse(worker_list)
 
 class Login(BaseMinix,View):
     
