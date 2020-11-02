@@ -160,28 +160,31 @@ strong{
     position: absolute;
     margin: auto auto;
     width: 300px;
-    height: 85px;
+    height: 95px;
     background-color: white;
-    box-shadow: 1px 1px 10px black;
+    box-shadow: 1px 1px 6px rgb(211, 211, 211);
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
     z-index: 400;
-    text-align: center;
 } 
 
-.logout_message span{
-    font-size: x-large;
+.logout_message div{
+    height: 25px;
+    font-size: small;
+    background-color: #0099ff;
+    color: black;
+    text-align: center;
 }
 
 .logout_message button{
-    border: 0 solid black;
-    box-shadow: 1px 1px 3px black;
+    border: 0 solid rgb(73, 186, 238);
     background-color: white;
     color: black;
     margin-top: 15px;
     width: 18%;
     height: 26px;   
+    float: right;
 }
 
 .select_site_window{
@@ -193,14 +196,14 @@ strong{
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    box-shadow: 1px 1px 10px black;
+    box-shadow: 1px 1px 2px #0099ff;
     z-index: 400;
 }
 
 .select_sites p{
     width: 100%;
     height: 40px;
-    box-shadow: 0 -1px 2px black;
+    box-shadow: 0 -1px 2px 0099ff;
     font-size: 25px;
     text-align: center;
     background-color: white;
