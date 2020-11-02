@@ -64,3 +64,17 @@ function Ajax(dictionary){
     }
     xmlhttp.send(data);
 }
+
+
+function show(...list){
+    for (const i of list) {
+        document.getElementById(i).style.display = "inline";
+    }
+}
+
+function hide(...list){
+    for (const i of list) {
+        document.getElementById(i).style.display = "none";
+    }
+}
+
