@@ -132,8 +132,27 @@ strong{
     height: 800px;
 }
 
-.worker_list_form .worker_list p{
+.worker_list{
+    width: 100%;
+    height: 300px;
+}
+
+.worker_list p{
     font-size: 30px;
+    overflow: auto;
+}
+
+.worker_list table{
+    border: 1px solid;
+    margin-left: 10%;
+    width:80%;
+    height:  30px;
+    background-color: white;
+    text-align: center;
+}
+
+.worker_list table tr{
+    height: 30px;
 }
 
 .logout_message{

@@ -46,6 +46,8 @@ class Index(BaseMinix,View):
                 for worker in workers:
                     worker_list.append(worker.id)
                     worker_list.append(' ')
+                    worker_list.append(worker.sex)
+                    worker_list.append(' ')
                     worker_list.append(worker.name)
                     worker_list.append(' ')
                     worker_list.append(worker.id_number)

@@ -43,7 +43,16 @@
     </div>
     <div class="worker_list_form">
         <div class="worker_list" id="worker_list">
-
+            <table border=2 id="worker_table">
+                <caption></caption>
+                <tr>
+                    <th id="site_name">id</th>
+                    <th id="site_address">姓名</th>
+                    <th id="site_address">性别</th>
+                    <th id="site_address">身份证号码</th>
+                    <th id="site_address">居住地址</th>
+                </tr>
+            </table>
         </div>
     </div>
     </div>
@@ -98,15 +107,23 @@
             callback: function (success, result) {
                 if (success) {
                     var results = result.split(' ');
-                    var worker_list = document.getElementById("worker_list");
+                    var worker_list = document.getElementById("worker_table");
                     if (results.length <= 1) {
+                        alert(siteName+"没有人员信息")
                         return;
                     }
-                    for (let index = 0; index < results.length; index += 4) {
-                        let r = document.createElement("p");
+                    worker_list.innerHTML = "<tr><th>id</th><th>姓名</th><th>性别</th><th>身份证号码</th><th>居住地址</th></tr>";
+                    for (let index = 0; index < results.length; index += 5) {
+                        let r = document.createElement("tr");
                         let array = new Array();
-                        array.push("id:", results[index], "    姓名", results[index + 1], "    身份证号码:", results[index + 2], "    居住地:",results[index + 3]);
-                        r.innerText = array.join('');
+                        
+                        array.push("<td>",results[index],"</td>");
+                        array.push("<td>",results[index+1],"</td>");
+                        array.push("<td>",results[index+2],"</td>");
+                        array.push("<td>",results[index+3],"</td>");
+                        array.push("<td>",results[index+4],"</td>");
+
+                        r.innerHTML = array.join('');
                         worker_list.appendChild(r);
                     }   
                 } else {
