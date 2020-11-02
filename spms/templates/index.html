@@ -11,52 +11,119 @@
 </head>
 
 <body>
-    <div>
-        <div class="header">
-            <button onclick="logout()">退出登陆</button>
-
+    <div class="select_sites_window" id="select_sites_window">
+        <div class="select_sites_list">
+            <table border=2>
+                <caption>工地列表</caption>
+                <tr>
+                    <th id="site_name">工地名称</th>
+                    <th id = "site_address">工地地址</th>
+                </tr>
+                <tr>
+                    <td>第二行</td>
+                    <td>B</td>
+                </tr>
+                <tr>
+                    <td>第三行</td>
+                    <td>C</td>
+                </tr>
+                
+                <tr>
+                    <td>第二行</td>
+                    <td>B</td>
+                </tr>
+                
+                <tr>
+                    <td>第二行</td>
+                    <td>B</td>
+                </tr>
+                
+                <tr>
+                    <td>第二行</td>
+                    <td>B</td>
+                </tr>
+                
+                <tr>
+                    <td>第二行</td>
+                    <td>B</td>
+                </tr>
+                
+                <tr>
+                    <td>第二行</td>
+                    <td>B</td>
+                </tr>
+            </table>
         </div>
+    </div>
+    <div class="logout_message" id="logout_message">
+        <span>是否退出登录</span>
+        <br>
+        <button onclick="logout()">确定</button>
+        <button onclick="hide_logout_message()">取消</button>
+    </div>
+    <div class="mask" id="mask"></div>
+    <div class="header">
+        <button onclick="show_logout_message()">退出登陆</button>
+        <button onclick="show_select_sites()">选择工地</button>
+    </div>
+    <div class="select_site_form">
         <div class="main_div">
-            <div class="select_site_form">
-                <select name="" id="sites_select">
+            <select name="" id="sites_select">
 
-                </select>
-            </div>
-            <div class="worker_list_form">
-
-            </div>
+            </select>
         </div>
+        <div class="worker_list_form">
+
+        </div>
+    </div>
     </div>
 </body>
 
 
 <script>
-    
+    var mask = document.getElementById("mask");
+    var logout_message = document.getElementById("logout_message");
+
+
+    function show_logout_message() {
+        mask.style.display = "inline";
+        logout_message.style.display = "inline";
+    }
+
+    function hide_logout_message() {
+        mask.style.display = "none";
+        logout_message.style.display = "none";
+    }
+
+    function show_select_sites() {
+
+    }
+
     var sites_select = document.getElementById("sites_select");
-    sites_select.onchange = function(event){
+    sites_select.onchange = function (event) {
         console.log(event);
     }
-    
+
     Ajax({
-        method:"POST",
-        url:"/",
-            async:true,
-            data:{
-                "type":"get_sites"
-            },
-            timeout:1000,
-            callback:function(success,result){
-                if (success) {
-                    var results = result.split(' ');
-                    for (const value of results) {
-                        sites_select.options.add(new Option(value, 1))
-                    }
-                }else{
-                    alert("获取工地信息失败,错误代码:"+result);
+        method: "POST",
+        url: "/",
+        async: true,
+        data: {
+            "type": "get_sites"
+        },
+        timeout: 1000,
+        callback: function (success, result) {
+            if (success) {
+                var results = result.split(' ');
+                for (const value of results) {
+                    sites_select.options.add(new Option(value, 1))
                 }
-            },
-        });
-    
+            } else {
+                alert("获取工地信息失败,错误代码:" + result);
+            }
+        },
+    });
+
 
 
     function logout() {
@@ -64,7 +131,7 @@
         location.reload();
     }
 
-    
+
 
 </script>
 

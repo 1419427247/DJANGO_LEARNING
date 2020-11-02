@@ -143,3 +143,80 @@ strong{
     width: 100%;
     height: 64px;
 }
+
+.logout_message{
+    display: none;
+    position: absolute;
+    margin: auto auto;
+    width: 300px;
+    height: 85px;
+    background-color: white;
+    box-shadow: 1px 1px 10px black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 400;
+    text-align: center;
+} 
+
+.logout_message span{
+    font-size: x-large;
+}
+
+.logout_message button{
+    border: 0 solid black;
+    box-shadow: 1px 1px 3px black;
+    background-color: white;
+    color: black;
+    margin-top: 15px;
+    width: 18%;
+    height: 26px;   
+}
+
+.select_sites_window{
+    position: absolute;
+    width: 650px;
+    height: 300px;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 1px 1px 10px black;
+    z-index: 400;
+}
+
+.select_sites_list caption{
+    width: 100%;
+    height: 40px;
+    box-shadow: 0 -1px 2px black;
+    font-size: 25px;
+    text-align: center;
+    background-color: white;
+}
+
+.select_sites_list{
+    width: 100%;
+    overflow:auto;
+    height: 250px;
+}
+
+.select_sites_list table{
+    border: 0 solid;
+    width: 100%;
+}
+
+.select_sites_list table tr{
+    text-align: center;
+    height: 30px;
+}
+
+
+.mask{
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 2048px;
+    background-color: white;
+    z-index: 300;
+    opacity: 0.2;
+}
