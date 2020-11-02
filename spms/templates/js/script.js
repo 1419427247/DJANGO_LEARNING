@@ -77,4 +77,3 @@ function hide(...list){
         document.getElementById(i).style.display = "none";
     }
 }
-

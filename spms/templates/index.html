@@ -18,17 +18,12 @@
                 <button onclick="hide('select_site_window','mask')">x</button>
             </p>
 
-            <div class = "select_sites_list">
-                <table border=2 id = "sites_table">
+            <div class="select_sites_list">
+                <table border=2 id="sites_table">
                     <caption></caption>
                     <tr>
                         <th id="site_name">工地名称</th>
                         <th id="site_address">工地地址</th>
-                    </tr>
-                    <tr>
-                        <td>第二行</td>
-                        <td>B</td>
-                        <td><button>选择</button></td>
                     </tr>
                 </table>
             </div>
@@ -41,17 +36,13 @@
         <button onclick="hide('logout_message','mask')">取消</button>
     </div>
     <div class="mask" id="mask"></div>
+
     <div class="header">
         <button onclick="show('logout_message','mask')">退出登陆</button>
         <button onclick="show('select_site_window','mask')">选择工地</button>
     </div>
-    <div class="select_site_form">
-        <div class="main_div">
-            <select name="" id="sites_select">
-
-            </select>
-        </div>
-        <div class="worker_list_form">
+    <div class="worker_list_form">
+        <div class="worker_list" id="worker_list">
 
         </div>
     </div>
@@ -60,15 +51,6 @@
 
 
 <script>
-    var mask = document.getElementById("mask");
-    var logout_message = document.getElementById("logout_message");
-    var select_site_window = document.getElementById("select_site_window");
-
-    var sites_select = document.getElementById("sites_select");
-    sites_select.onchange = function (event) {
-        console.log(event);
-    }
-
     Ajax({
         method: "POST",
         url: "/",
@@ -80,8 +62,16 @@
         callback: function (success, result) {
             if (success) {
                 var results = result.split(' ');
-                for (const value of results) {
-                    sites_select.options.add(new Option(value, 1))
+                var table_list = document.getElementById("sites_table");
+                for (let index = 0; index < results.length; index += 2) {
+
+                    let array = new Array();
+                    array.push("<td>", results[index], "</td>");
+                    array.push("<td>", results[index + 1], "</td>");
+                    array.push("<td><button onclick = \"getSiteWorkers('", results[index], "');\">", "选择", "</button></td>");
+                    var tr = document.createElement("tr");
+                    tr.innerHTML = array.join('');
+                    table_list.appendChild(tr);
                 }
             } else {
                 alert("获取工地信息失败,错误代码:" + result);
@@ -92,6 +82,42 @@
     function logout() {
         Cookie.delete('token');
         location.reload();
+    }
+
+    function getSiteWorkers(siteName) {
+        hide('select_site_window', 'mask')
+        Ajax({
+            method: "POST",
+            url: "/",
+            async: true,
+            data: {
+                "type": "get_workers",
+                "site_name": siteName
+            },
+            timeout: 1000,
+            callback: function (success, result) {
+                if (success) {
+                    var results = result.split(' ');
+                    var worker_list = document.getElementById("worker_list");
+                    if (results.length <= 1) {
+                        return;
+                    }
+                    for (let index = 0; index < results.length; index += 4) {
+                        let r = document.createElement("p");
+                        let array = new Array();
+                        array.push("id:", results[index], "    姓名", results[index + 1], "    身份证号码:", results[index + 2], "    居住地:",results[index + 3]);
+                        r.innerText = array.join('');
+                        worker_list.appendChild(r);
+                    }   
+                } else {
+                    alert("无法获取工人信息,错误代码:" + result);
+                }
+            },
+        });
+
+
+
+        console.log(siteName);
     }
 
 </script>

@@ -5,7 +5,7 @@ from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from spms.models import User,ConstructionSite
+from spms.models import User,Worker,ConstructionSite
 
 class BaseMinix(object):
     index = "index.html"
@@ -34,12 +34,29 @@ class Index(BaseMinix,View):
             if request.POST.get('type') == 'get_sites':
                 r_list = []
                 for site in ConstructionSite.objects.all():
-                    r_list.append(site.name)
+                    r_list.append(site.name + ' ' + site.address)
                     r_list.append(' ')
                 r_list.pop();
                 return HttpResponse(r_list)
-            if request.POST.get('type') == 'get_sites':
-                pass
+            if request.POST.get('type') == 'get_workers':
+                site_name = request.POST.get('site_name');
+
+                workers = Worker.objects.filter(site_id = ConstructionSite.objects.get(name=site_name).id);
+                worker_list = ['']
+                for worker in workers:
+                    worker_list.append(worker.id)
+                    worker_list.append(' ')
+                    worker_list.append(worker.name)
+                    worker_list.append(' ')
+                    worker_list.append(worker.id_number)
+                    worker_list.append(' ')
+                    worker_list.append(worker.residential_address)
+                    worker_list.append(' ')
+
+                worker_list.pop();
+                return HttpResponse(worker_list);
+
+
 class Login(BaseMinix,View):
     
     def get(self,request):
@@ -48,7 +65,6 @@ class Login(BaseMinix,View):
     def post(self,request):
         name = request.POST.get("user_name")
         password = request.POST.get("user_password")
-        print(request.POST)
         if name is None or name == '' or password is None or password == '':
             return HttpResponse("0 请输入用户名和密码")
         ret = User.objects.filter(name=name,password=password)

@@ -8,7 +8,7 @@ from django.utils import timezone
 
 
 class User(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True,auto_created=True)
 
     name = models.CharField(unique=True, max_length=32)
 
@@ -24,24 +24,17 @@ class User(models.Model):
 
 
 class ConstructionSite(models.Model):
-    id = models.AutoField(primary_key=True, editable=False)
+    id = models.AutoField(primary_key=True,auto_created=True,editable=False)
 
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32,unique=True)
 
     address = models.CharField(max_length=20)
 
     def __str__(self):
         return self.name
 
-
-class ConstructionSitePersonnel(models.Model):
-    construction_site_id = models.IntegerField()
-
-    worker_id = models.IntegerField()
-
-
 class Worker(models.Model):
-    id = models.IntegerField(primary_key=True, editable=False, default=1)
+    id = models.AutoField(primary_key=True)
 
     name = models.CharField(max_length=32)
 
@@ -49,11 +42,13 @@ class Worker(models.Model):
 
     nation = models.CharField(max_length=8)
 
-    id_number = models.CharField(max_length=20)
+    id_number = models.CharField(max_length=20,unique=True)
 
     residential_address = models.CharField(max_length=20)
 
-    registration_data = models.DateTimeField(default=timezone.now)
+    registration_data = models.DateTimeField(null=True,default=timezone.now)
+
+    site_id = models.IntegerField(default=-1)
 
     def __str__(self):
         return self.name
