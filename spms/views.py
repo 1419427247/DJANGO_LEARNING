@@ -1,6 +1,6 @@
 import uuid
 import base64
-
+import json
 from django.db import models
 from django.http import HttpResponse
 from django.urls import path
@@ -21,16 +21,16 @@ class LoginDecorator(object):
         return decorated
 
 class ModelManager(object):
-    def to_string(self,objects,delimiter,*args):
+    def to_string(self,objects,*args):
         if objects is None:
             return ''
-        array = []
+        arr = []
         for obj in objects:
+            kv_dice = dict()
             for arg in args:
-                array.append(getattr(obj,arg))
-                array.append(delimiter)
-        array.pop()
-        return array
+                kv_dice[arg] = getattr(obj,arg)
+            arr.append(kv_dice)
+        return json.dumps(arr)
 
 class UserManager():
     def isLogged(self, token):
@@ -42,16 +42,20 @@ class UserManager():
 class ConstructionSiteManager(ModelManager):
     def get_all(self):
         sites = ConstructionSite.objects.all()
-        return self.to_string(sites,' ','name','address')
+        return self.to_string(sites,'id','name','address')
 
 class WorkerManager(ModelManager):
-    def get_all_by_site_name(self,workers,value):
-        workers = Worker.objects.filter(site_id=ConstructionSite.objects.get(name=value).id)
-        return self.to_string(workers,' ','id','name','sex','id_number','residential_address')
+    def get_all_by_site_id(self,value):
+        workers = Worker.objects.filter(site_id=value)
+        return self.to_string(workers,'id','name','sex','id_number','residential_address')
 
 userManager = UserManager()
 constructionSiteManager = ConstructionSiteManager()
 workerManager = WorkerManager()
+
+
+
+
 
 class Index(View):
     @LoginDecorator()
@@ -64,9 +68,8 @@ class Index(View):
             return HttpResponse(constructionSiteManager.get_all())
 
         elif request.POST.get('type') == 'get_workers':
-            site_name = request.POST.get('site_name')
-            workers = Worker.objects.filter(site_id=ConstructionSite.objects.get(name=site_name).id)
-            return HttpResponse(workerManager.get_all_by_site_name(workers,site_name))
+            site_id = request.POST.get('site_id')
+            return HttpResponse(workerManager.get_all_by_site_id(site_id),content_type = "application/json")
 
         elif request.POST.get('type') == 'search_workers':
             search_id = request.POST.get('search_id')

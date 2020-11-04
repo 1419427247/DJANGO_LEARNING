@@ -22,6 +22,7 @@
                 <table border=2 id="sites_table">
                     <caption></caption>
                     <tr>
+                        <th id="site_id">工地id</th>
                         <th id="site_name">工地名称</th>
                         <th id="site_address">工地地址</th>
                     </tr>
@@ -86,15 +87,15 @@
         timeout: 1000,
         callback: function (success, result) {
             if (success) {
-                var results = result.split(' ');
+                list_json = JSON.parse(result);
                 var table_list = document.getElementById("sites_table");
-                for (let index = 0; index < results.length; index += 2) {
-
-                    let array = new Array();
-                    array.push("<td>", results[index], "</td>");
-                    array.push("<td>", results[index + 1], "</td>");
-                    array.push("<td><button onclick = \"getSiteWorkers('", results[index], "');\">", "选择", "</button></td>");
+                for (const iterator of list_json) {
                     var tr = document.createElement("tr");
+                    let array = new Array();
+                    array.push("<td>", iterator.id, "</td>");
+                    array.push("<td>", iterator.name, "</td>");
+                    array.push("<td>", iterator.address, "</td>");
+                    array.push("<td><button onclick = \"getSiteWorkers('", iterator.id, "');\">", "选择", "</button></td>");
                     tr.innerHTML = array.join('');
                     table_list.appendChild(tr);
                 }
@@ -109,7 +110,7 @@
         location.reload();
     }
 
-    function getSiteWorkers(siteName) {
+    function getSiteWorkers(site_id) {
         hide('select_site_window', 'mask')
         Ajax({
             method: "POST",
@@ -117,31 +118,32 @@
             async: true,
             data: {
                 "type": "get_workers",
-                "site_name": siteName
+                "site_id": site_id
             },
             timeout: 1000,
             callback: function (success, result) {
                 if (success) {
-                    var results = result.split(' ');
+                    list_json = JSON.parse(result);
                     var worker_list = document.getElementById("worker_table");
-                    if (results.length <= 1) {
-                        alert(siteName+"没有人员信息")
+                    if (list_json.length == 0) {
+                        alert("没有人员信息")
                         return;
                     }
                     worker_list.innerHTML = "<tr><th>id</th><th>姓名</th><th>性别</th><th>身份证号码</th><th>居住地址</th></tr>";
-                    for (let index = 0; index < results.length; index += 5) {
+                    
+                    for (const iterator of list_json) {
                         let r = document.createElement("tr");
                         let array = new Array();
                         
-                        array.push("<td>",results[index],"</td>");
-                        array.push("<td>",results[index+1],"</td>");
-                        array.push("<td>",results[index+2],"</td>");
-                        array.push("<td>",results[index+3],"</td>");
-                        array.push("<td>",results[index+4],"</td>");
+                        array.push("<td>",iterator.id,"</td>");
+                        array.push("<td>",iterator.name,"</td>");
+                        array.push("<td>",iterator.sex,"</td>");
+                        array.push("<td>",iterator.id_number,"</td>");
+                        array.push("<td>",iterator.residential_address,"</td>");
 
                         r.innerHTML = array.join('');
                         worker_list.appendChild(r);
-                    }   
+                    }
                 } else {
                     alert("无法获取工人信息,错误代码:" + result);
                 }
